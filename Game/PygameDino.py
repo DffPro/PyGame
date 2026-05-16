@@ -9,7 +9,7 @@ background = pygame.Surface((300, 300))
 background.fill(pygame.Color('#000000'))
 
 color_list = [
-    pygame.Color('#FF0000'),  # красныйf
+    pygame.Color('#FF0000'),  # красный
     pygame.Color('#00FF00'),  # зеленый
     pygame.Color('#0000FF'),  # синий
     pygame.Color('#FFFF00'),  # желтый
