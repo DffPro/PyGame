@@ -13,7 +13,7 @@ color_list = [
     pygame.Color('#00FF00'),  # зеленый
     pygame.Color('#0000FF'),  # синий
     pygame.Color('#FFFF00'),  # желтый
-    pygame.Color('#00FFFF'),  # бирюзовый
+    pygame.Color('#00FFFF'),  # бирюзовыйсм
     pygame.Color('#FF00FF'),  # пурпурный
     pygame.Color('#FFFFFF')   # белый
 ]
