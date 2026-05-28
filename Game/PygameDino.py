@@ -7,12 +7,22 @@ pygame.display.set_caption('Dino-Reverse')
 clock = pygame.time.Clock()
 font = pygame.freetype.Font(None, 40)
 
-class Dino():
-    cactus_Image = pygame.image.load('Image/Cactus.jpg')
-    dino_Image = pygame.image.load('Image/Dino.jpg')
-    ground_Image = pygame.image.load('Image/ground.png')
+cactus_Image = pygame.image.load('Image/Cactus.jpg')
+dino_Image = pygame.image.load('Image/Dino.jpg')
+dino_Image = pygame.transform.scale
+ground_Image = pygame.image.load('Image/ground.png')
 
-dino = Dino(dino_Image, (100, 450))
+
+class Dino():
+    def __init__(self, image, position):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+    
+    def draw(self):
+        screen.blit(self.image, self.rect)
+
+dino = Dino(dino_Image, (100, 400))
 
 running = True
 while running:

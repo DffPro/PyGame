@@ -1,4 +1,7 @@
+import random
 import pygame
+
+
 
 pygame.init()
 pygame.display.set_caption('Измени цвет фона')
