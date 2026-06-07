@@ -18,6 +18,21 @@ class Dino():
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.y = 0
+        self.max_jump = 40
+        self.in_jump = False
+    
+    def jump(self):
+        if self.in_jump:
+            if self.y < self.max_jump:
+                self.y += 1
+                self.rect.y += 1
+            elif self.y < self.max_jump * 2:
+                self.y += 1 
+                self.rect.y += 1 
+            else:
+                self.in_jump = False
+                self.y = False
     
     def draw(self):
         screen.blit(self.image, self.rect)
@@ -29,9 +44,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        if event == pygame.KEYDOWN:
+            dino.in_jump = True
 
     screen.fill((0,0,0))
     dino.draw()
+    dino.jump
     pygame.display.flip()
     clock.tick(60)
