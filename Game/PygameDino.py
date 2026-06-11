@@ -9,8 +9,8 @@ font = pygame.freetype.Font(None, 40)
 
 cactus_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Cactus.jpg')
 dino_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Dino.jpg')
-dino_Image = pygame.transform.scale(dino_Image, (50, 50))
-ground_Image = pygame.image.load('Image/ground.png')
+dino_Image = pygame.transform.scale(dino_Image, (120, 120))
+ground_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/ground.png')
 
 
 class Dino():
