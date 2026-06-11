@@ -2,10 +2,10 @@ import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((1200,600))
+screen = pygame.display.set_mode((900,600))
 pygame.display.set_caption('Dino-Reverse')
 clock = pygame.time.Clock()
-font = pygame.freetype.Font(None, 40)
+
 
 cactus_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Cactus.jpg')
 dino_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Dino.jpg')
@@ -19,6 +19,7 @@ class Dino():
         self.rect = self.image.get_rect()
         self.rect.center = position
         self.y = 0
+        self.step = 5 
         self.max_jump = 40
         self.in_jump = False
     
@@ -26,10 +27,10 @@ class Dino():
         if self.in_jump:
             if self.y < self.max_jump:
                 self.y += 1
-                self.rect.y += 1
+                self.rect.y -= self.step
             elif self.y < self.max_jump * 2:
                 self.y += 1 
-                self.rect.y += 1 
+                self.rect.y += self.step 
             else:
                 self.in_jump = False
                 self.y = False
@@ -37,7 +38,7 @@ class Dino():
     def draw(self):
         screen.blit(self.image, self.rect)
 
-dino = Dino(dino_Image, (100, 400))
+dino = Dino(dino_Image, (800, 475))
 
 running = True
 while running:
