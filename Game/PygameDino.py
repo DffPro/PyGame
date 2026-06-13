@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 
 
 cactus_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Cactus.jpg')
-dino_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Dino.jpg')
+dino_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/dino.png')
 dino_Image = pygame.transform.scale(dino_Image, (120, 120))
 ground_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/ground.png')
 
@@ -17,7 +17,7 @@ cactus_group = pygame.sprite.Group()
 
 ground_event = pygame.USEREVENT
 cactus_event = pygame.USEREVENT +1
-pygame.time.set_timer(ground_event, 2000)
+pygame.time.set_timer(ground_event, 1100)
 
 class Ground(pygame.sprite.Sprite):
     def __init__(self, image, position):
@@ -26,7 +26,7 @@ class Ground(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = position
     def update(self):
-        self.rect.x -= 3
+        self.rect.x -= -3
         if self.rect.right <0:
             self.kill() 
 
@@ -65,13 +65,13 @@ while running:
         if event.type == pygame.KEYDOWN:
             dino.in_jump = True
         if event.type == ground_event:
-            g = Ground(ground_Image, (900, 450))
+            g = Ground(ground_Image, (100, 450))
             ground_group.add(g)
 
     screen.fill((0, 0, 0))
+    ground_group.draw(screen)
     dino.jump()
     dino.draw()
     ground_group.update()
-    ground_group.draw(screen)
     pygame.display.flip()
     clock.tick(60)
