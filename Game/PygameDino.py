@@ -100,13 +100,13 @@ while running:
 
     screen.fill((255, 255, 255))
     if dino.game_status == 'Game':
+        ground_group.update()
         ground_group.draw(screen)
         cactus_group.update()
         cactus_group.draw(screen)
         dino.jump()
         dino.draw()
         font.render_to(screen, (850, 50), str(dino.score), (0,0,0))
-        ground_group.update()
     else:
         font.render_to(screen, (300, 200), 'Game over :(', (0,0,0 ))
     pygame.display.flip()
