@@ -108,6 +108,6 @@ while running:
         font.render_to(screen, (850, 50), str(dino.score), (0,0,0))
         ground_group.update()
     else:
-        font.render_to(screen, (450, 200), 'Game over', (0,0,0 ))
+        font.render_to(screen, (300, 200), 'Game over :(', (0,0,0 ))
     pygame.display.flip()
     clock.tick(60)
