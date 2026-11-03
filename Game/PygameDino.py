@@ -2,6 +2,7 @@ import pygame
 import random
 import pygame.freetype
 
+
 pygame.init()
 
 screen = pygame.display.set_mode((900,600))
@@ -24,18 +25,6 @@ cactus_event = pygame.USEREVENT +1
 pygame.time.set_timer(ground_event, 1000)
 pygame.time.set_timer(cactus_event, 4000)
 
-
-class Ground(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = position
-    def update(self):
-        self.rect.x -= -5
-        if self.rect.right < 0:
-            self.kill() 
-
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, image, position):
         super().__init__()
@@ -49,6 +38,17 @@ class Cactus(pygame.sprite.Sprite):
             dino.score +=1
         if self.rect.colliderect(dino.rect):
             dino.game_status = 'Menu' 
+
+class Ground(pygame.sprite.Sprite):
+    def __init__(self, image, position):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+    def update(self):
+        self.rect.x -= -5
+        if self.rect.right < 0:
+            self.kill() 
 
 class Dino():
     def __init__(self, image, position):
@@ -78,7 +78,7 @@ class Dino():
         screen.blit(self.image, self.rect)
 
 dino = Dino(dino_Image, (800, 500))
-g = Ground(ground_Image, (300, 550))
+g = (ground_Image, (300, 550))
 ground_group.add(g)
 g = Ground(ground_Image, (900, 550))
 ground_group.add(g)
