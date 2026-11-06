@@ -23,7 +23,7 @@ cactus_group = pygame.sprite.Group()
 ground_event = pygame.USEREVENT
 cactus_event = pygame.USEREVENT +1
 pygame.time.set_timer(ground_event, 1000)
-pygame.time.set_timer(cactus_event, 4000)
+pygame.time.set_timer(cactus_event, 4000)у
 
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, image, position):
