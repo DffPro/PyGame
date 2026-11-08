@@ -1,113 +1,143 @@
-import pygame
+import os
 import random
+import pygame
 import pygame.freetype
 
+from Setting import *
+from Cactus import Cactus
+from Ground import Ground
+from Dino import Dino
 
-pygame.init()
 
-screen = pygame.display.set_mode((900,600))
-pygame.display.set_caption('Dino-Reverse')
-clock = pygame.time.Clock()
-font = pygame.freetype.Font(None, 40)
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption('Dino-Reverse')
+        self.clock = pygame.time.Clock()
+        self.font = pygame.freetype.Font(None, 40)
+        self.small_font = pygame.freetype.Font(None, 28)
 
-cactus_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Cactus.jpg')
-cactus_Image = pygame.transform.scale(cactus_Image, (60, 80))
-dino_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/Dino.jpg')
-dino_Image = pygame.transform.scale(dino_Image, (120, 120))
-ground_Image = pygame.image.load('C:/Users/Фрошикейн/PyGame/Game/Image/ground.png')
-ground_Image = pygame.transform.scale(ground_Image, (900, 142))
+        self.load_images()
 
-ground_group = pygame.sprite.Group()
-cactus_group = pygame.sprite.Group()
+        self.ground = Ground(self.ground_image, 479)
+        self.dino = Dino(self.dino_image, 800)
+        self.cactus_group = pygame.sprite.Group()
 
-ground_event = pygame.USEREVENT
-cactus_event = pygame.USEREVENT +1
-pygame.time.set_timer(ground_event, 1000)
-pygame.time.set_timer(cactus_event, 4000)   
+        self.speed = START_SPEED
+        self.high_score = self.load_high_score()
+        self.status = 'Game'
+        self.running = True
 
-class Cactus(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = position
+        pygame.time.set_timer(CACTUS_EVENT, 2500)
+
+    def load_images(self):
+        def load(name, size=None):
+            path = os.path.join(IMAGE_DIR, name)
+            image = pygame.image.load(path)
+            if size:
+                image = pygame.transform.scale(image, size)
+            return image
+
+        self.cactus_image = load('Cactus.jpg')   # размер задаёт сам кактус
+        self.dino_image = load('Dino.jpg', (120, 120))
+        self.ground_image = load('ground.png', (WIDTH, 142))
+
+    def load_high_score(self):
+        try:
+            with open(SCORE_FILE, 'r') as file:
+                return int(file.read())
+        except (FileNotFoundError, ValueError):
+            return 0
+
+    def save_high_score(self):
+        with open(SCORE_FILE, 'w') as file:
+            file.write(str(self.high_score))
+
+    def restart(self):
+        self.cactus_group.empty()
+        self.dino.reset()
+        self.speed = START_SPEED
+        self.status = 'Game'
+
+    def game_over(self):
+        self.status = 'Menu'
+        if self.dino.score > self.high_score:
+            self.high_score = self.dino.score
+            self.save_high_score()
+
+    def update_speed(self):
+        # Чем больше очков, тем быстрее игра
+        level = self.dino.score // SPEED_UP_EVERY
+        self.speed = min(START_SPEED + level, MAX_SPEED)
+
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+                elif self.status == 'Game':
+                    if event.key in (pygame.K_SPACE, pygame.K_UP):
+                        self.dino.jump()
+                else:
+                    if event.key == pygame.K_SPACE:
+                        self.restart()
+
+            elif event.type == CACTUS_EVENT:
+                pygame.time.set_timer(CACTUS_EVENT, random.randint(1800, 4500))
+                if self.status == 'Game':
+                    self.cactus_group.add(Cactus(self.cactus_image))
+
     def update(self):
-        self.rect.x -= -5
-        if self.rect.right > 1000:
-            self.kill()
-            dino.score +=1
-        if self.rect.colliderect(dino.rect):
-            dino.game_status = 'Menu' 
+        if self.status != 'Game':
+            return
 
-class Ground(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = position
-    def update(self):
-        self.rect.x -= -5
-        if self.rect.right < 0:
-            self.kill() 
+        self.ground.update(self.speed)
+        self.cactus_group.update(self.speed)
+        self.dino.update()
 
-class Dino():
-    def __init__(self, image, position):
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = position
-        self.y = 0
-        self.step = 5
-        self.max_jump = 40
-        self.in_jump = False
-        self.score = 0
-        self.game_status = 'Game'
-    
-    def jump(self):
-        if self.in_jump:
-            if self.y < self.max_jump:
-                self.y += 1
-                self.rect.y -= self.step
-            elif self.y < self.max_jump * 2:
-                self.y += 1 
-                self.rect.y += self.step
-            else:
-                self.in_jump = False
-                self.y = False
-    
+        for cactus in self.cactus_group:
+            if cactus.rect.left > WIDTH:       # кактус ушёл за экран
+                cactus.kill()
+                self.dino.score += 1
+                self.update_speed()
+            elif cactus.rect.colliderect(self.dino.hitbox):
+                self.game_over()
+
     def draw(self):
-        screen.blit(self.image, self.rect)
+        self.screen.fill((255, 255, 255))
 
-dino = Dino(dino_Image, (800, 500))
-g = (ground_Image, (300, 550))
-ground_group.add(g)
-g = Ground(ground_Image, (900, 550))
-ground_group.add(g)
+        if self.status == 'Game':
+            self.ground.draw(self.screen)
+            self.cactus_group.draw(self.screen)
+            self.dino.draw(self.screen)
+            self.font.render_to(self.screen, (820, 30),
+                                str(self.dino.score), (0, 0, 0))
+            self.small_font.render_to(self.screen, (20, 30),
+                                      f'Рекорд: {self.high_score}', (100, 100, 100))
+        else:
+            self.font.render_to(self.screen, (300, 200),
+                                'Game over :(', (0, 0, 0))
+            self.small_font.render_to(self.screen, (300, 260),
+                                      f'Счёт: {self.dino.score}', (0, 0, 0))
+            self.small_font.render_to(self.screen, (300, 295),
+                                      f'Рекорд: {self.high_score}', (0, 0, 0))
+            self.small_font.render_to(self.screen, (230, 350),
+                                      'SPACE - заново, ESC - выход', (0, 0, 0))
 
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            dino.in_jump = True
-        if event.type == ground_event:
-            g = Ground(ground_Image, (10, 550))
-            ground_group.add(g)
-        if event.type == cactus_event:
-            pygame.time.set_timer(cactus_event, random.randint(4000, 8500))
-            c = Cactus(cactus_Image, (1, 520))
-            cactus_group.add(c)
+        pygame.display.flip()
 
-    screen.fill((255, 255, 255))
-    if dino.game_status == 'Game':
-        ground_group.update()
-        ground_group.draw(screen)
-        cactus_group.update()
-        cactus_group.draw(screen)
-        dino.jump()
-        dino.draw()
-        font.render_to(screen, (850, 50), str(dino.score), (0,0,0))
-    else:
-        font.render_to(screen, (300, 200), 'Game over :(', (0,0,0 ))
-    pygame.display.flip()
-    clock.tick(60)
+    def run(self):
+        while self.running:
+            self.handle_events()
+            self.update()
+            self.draw()
+            self.clock.tick(FPS)
+        pygame.quit()
+
+
+if __name__ == '__main__':
+    Game().run()

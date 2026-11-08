@@ -1,12 +1,15 @@
-import pygame
+class Ground:
+    """Бесконечно прокручивающаяся земля (едет вправо)."""
 
-class Ground(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        super().__init__()
+    def __init__(self, image, y):
         self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = position
-    def update(self):
-        self.rect.x -= -5
-        if self.rect.right < 0:
-            self.kill() 
+        self.width = image.get_width()
+        self.y = y
+        self.offset = 0
+
+    def update(self, speed):
+        self.offset = (self.offset + speed) % self.width
+
+    def draw(self, screen):
+        screen.blit(self.image, (self.offset - self.width, self.y))
+        screen.blit(self.image, (self.offset, self.y))

@@ -1,15 +1,18 @@
+import random
 import pygame
+from Setting import FLOOR_Y
+
 
 class Cactus(pygame.sprite.Sprite):
-    def __init__(self, image, position):
+    def __init__(self, image):
         super().__init__()
-        self.image = image
+        # Кактусы получаются трёх разных размеров
+        height = random.choice([60, 80, 100])
+        width = int(height * 0.75)
+        self.image = pygame.transform.scale(image, (width, height))
         self.rect = self.image.get_rect()
-        self.rect.center = position
-    def update(self, dino):
-        self.rect.x -= -5
-        if self.rect.right > 1000:
-            self.kill()
-            dino.score +=1
-        if self.rect.colliderect(dino.rect):
-            dino.game_status = 'Menu' 
+        self.rect.right = 0            # появляется за левым краем экрана
+        self.rect.bottom = FLOOR_Y
+
+    def update(self, speed):
+        self.rect.x += speed           # кактус едет к динозавру
