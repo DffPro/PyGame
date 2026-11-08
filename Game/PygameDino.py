@@ -39,7 +39,7 @@ class Game:
                 image = pygame.transform.scale(image, size)
             return image
 
-        self.cactus_image = load('Cactus.jpg')   # размер задаёт сам кактус
+        self.cactus_image = load('Cactus.jpg')  
         self.dino_image = load('Dino.jpg', (120, 120))
         self.ground_image = load('ground.png', (WIDTH, 142))
 

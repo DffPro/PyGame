@@ -18,7 +18,6 @@ class Dino:
 
     @property
     def hitbox(self):
-        # Хитбокс меньше картинки, чтобы столкновения были честнее
         return self.rect.inflate(-40, -30)
 
     def jump(self):
@@ -27,7 +26,6 @@ class Dino:
             self.on_ground = False
 
     def update(self):
-        # Прыжок с гравитацией
         self.velocity_y += GRAVITY
         self.rect.y += self.velocity_y
 

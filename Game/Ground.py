@@ -1,5 +1,4 @@
 class Ground:
-    """Бесконечно прокручивающаяся земля (едет вправо)."""
 
     def __init__(self, image, y):
         self.image = image
