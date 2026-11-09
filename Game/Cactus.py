@@ -6,7 +6,7 @@ from Setting import FLOOR_Y
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, image):
         super().__init__()
-        height = random.choice([70, 90, 110])
+        height = random.choice([70, 90, 100])
         width = int(height * 0.75)
         self.image = pygame.transform.scale(image, (width, height))
         self.rect = self.image.get_rect()

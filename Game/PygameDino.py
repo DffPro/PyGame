@@ -67,7 +67,6 @@ class Game:
             self.save_high_score()
 
     def update_speed(self):
-        # Чем больше очков, тем быстрее игра
         level = self.dino.score // SPEED_UP_EVERY
         self.speed = min(START_SPEED + level, MAX_SPEED)
 
@@ -100,7 +99,7 @@ class Game:
         self.dino.update()
 
         for cactus in self.cactus_group:
-            if cactus.rect.left > WIDTH:       # кактус ушёл за экран
+            if cactus.rect.left > WIDTH:       
                 cactus.kill()
                 self.dino.score += 1
                 self.update_speed()
