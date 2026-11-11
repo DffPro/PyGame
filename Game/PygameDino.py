@@ -99,7 +99,7 @@ class Game:
         self.dino.update()
 
         for cactus in self.cactus_group:
-            if cactus.rect.left > WIDTH:       
+            if cactus.rect.left > WIDTH:        
                 cactus.kill()
                 self.dino.score += 1
                 self.update_speed()

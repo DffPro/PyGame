@@ -1,6 +1,6 @@
 import os
 
-WIDTH, HEIGHT = 900, 600
+WIDTH, HEIGHT = 900, 600    
 FPS = 60
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
