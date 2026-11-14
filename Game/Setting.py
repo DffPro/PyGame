@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGE_DIR = os.path.join(BASE_DIR, 'Image')
 SAVE_FILE = os.path.join(BASE_DIR, 'save.json')
 
-
+#
 STATE_MENU = 'menu'
 STATE_PLAYING = 'playing'
 STATE_GAME_OVER = 'game_over'
