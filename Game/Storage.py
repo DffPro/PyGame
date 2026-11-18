@@ -17,3 +17,4 @@ class ScoreStorage:
     def save(self, high_score):
         with open(self._path, 'w') as file:
             json.dump({'high_score': high_score}, file)
+            #
