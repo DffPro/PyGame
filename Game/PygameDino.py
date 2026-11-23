@@ -6,7 +6,7 @@ import pygame.freetype
 from Setting import *
 from Cactus import Cactus
 from Ground import Ground
-from Dino import Dino
+from Game.Models.Dino import Dino
 
 
 class Game:
