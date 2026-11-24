@@ -2,7 +2,6 @@ import json
 
 
 class ScoreStorage:
-    """Сохраняет и загружает рекорд из json-файла."""
 
     def __init__(self, path):
         self._path = path
